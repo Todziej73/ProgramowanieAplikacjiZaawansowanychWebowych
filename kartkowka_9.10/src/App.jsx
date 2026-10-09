@@ -1,20 +1,12 @@
 import { useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-const waluty = [
-  "Złoty",
-  "Euro",
-  "Dolar",
-  "Funt",
-  "Frank",
-];
+import waluty from './waluty';
 
 function Pozycja({ nazwa }) {
   return <li>{nazwa}</li>;
 }
 
 export default function App() {
-  // 4. Refy do pól niekontrolowanych
   const imieNazwiskoRef = useRef();
   const numerRef = useRef();
 
@@ -39,7 +31,6 @@ export default function App() {
     <div className='p-2'>
       <h2>Liczba walut: {waluty.length}</h2>
 
-      {/* 3. Ponumerowana lista z użyciem .map() */}
       <ol>
         {waluty.map((pozycja, index) => (
           <Pozycja key={index} nazwa={pozycja} />
