@@ -1,122 +1,75 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useRef } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const waluty = [
+  "Złoty",
+  "Euro",
+  "Dolar",
+  "Funt",
+  "Frank",
+];
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+function Pozycja({ nazwa }) {
+  return <li>{nazwa}</li>;
 }
 
-export default App
+export default function App() {
+  // 4. Refy do pól niekontrolowanych
+  const imieNazwiskoRef = useRef();
+  const numerRef = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const imieNazwisko = imieNazwiskoRef.current.value;
+    const numer = parseInt(numerRef.current.value, 10);
+
+    console.log("Imię i nazwisko:", imieNazwisko);
+
+    const wybranaWaluta = waluty[numer - 1];
+
+    if (wybranaWaluta) {
+      console.log("Wybrana waluta:", wybranaWaluta);
+    } else {
+      console.log("Nieprawidłowy numer waluty");
+    }
+  };
+
+  return (
+    <div className='p-2'>
+      <h2>Liczba walut: {waluty.length}</h2>
+
+      {/* 3. Ponumerowana lista z użyciem .map() */}
+      <ol>
+        {waluty.map((pozycja, index) => (
+          <Pozycja key={index} nazwa={pozycja} />
+        ))}
+      </ol>
+
+      {/* 4. Formularz */}
+      <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
+        <div style={{ marginBottom: '10px' }}>
+          <label htmlFor="imie">Imię i nazwisko:</label><br />
+          <input 
+            type="text" 
+            id="imie" 
+            ref={imieNazwiskoRef} 
+            required 
+          />
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label htmlFor="numer">Numer waluty:</label><br />
+          <input 
+            type="number" 
+            id="numer" 
+            ref={numerRef} 
+            required 
+          />
+        </div>
+
+        <button type="submit" className='btn btn-primary'>Zatwierdź wybór</button>
+      </form>
+    </div>
+  );
+}
