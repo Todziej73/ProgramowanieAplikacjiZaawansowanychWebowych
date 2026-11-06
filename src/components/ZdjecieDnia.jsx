@@ -19,8 +19,10 @@ function ZdjecieDnia() {
         if (!odpowiedz.ok) throw new Error('Błąd serwera: ' + odpowiedz.status)
         const dane = await odpowiedz.json()
         setZdjecie(dane)
+        setError(null) // Czyszczenie starego błędu przy sukcesie
       } catch (err) {
         setError(err.message)
+        setZdjecie(null) // Czyszczenie starego zdjęcia, żeby nie zostało na ekranie
       } finally {
         setIsLoading(false)
       }
@@ -31,6 +33,7 @@ function ZdjecieDnia() {
   return (
     <div className="container mt-5 mb-5">
       <h2>Zdjęcie dnia</h2>
+      {error && <div className="alert alert-danger">Błąd: {error}</div>}
       {zdjecie && (
         <>
           <img 
