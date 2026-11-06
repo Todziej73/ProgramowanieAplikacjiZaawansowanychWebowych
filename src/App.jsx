@@ -1,16 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar.jsx'
 import CategoryBar from './components/CategoryBar.jsx'
 import Gallery from './components/Gallery.jsx'
 import AddPhotoModal from './components/AddPhotoModal.jsx'
 import FiltersOffcanvas from './components/FiltersOffcanvas.jsx'
 import Footer from './components/Footer.jsx'
-import photos from './data/photos.json'
 import './App.css'
 
 function App() {
-  const [zdjecia, setZdjecia] = useState(photos)
+  const [zdjecia, setZdjecia] = useState([])
   const [aktywnaKategoria, setAktywnaKategoria] = useState('wszystkie')
+
+  useEffect(() => {
+  async function pobierzZdjecia() {
+    try {
+      const odpowiedz = await fetch('/photos.json')
+      if (!odpowiedz.ok) throw new Error('Błąd serwera: ' + odpowiedz.status)
+      const dane = await odpowiedz.json()
+      setZdjecia(dane)
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+  pobierzZdjecia()
+  }, [])
+
+
 
   // Filtrowanie widocznych zdjęć
   const widoczne =
